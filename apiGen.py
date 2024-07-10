@@ -76,7 +76,7 @@ def setup_auth(project_path):
         download_file_from_github("https://raw.githubusercontent.com/BucknerHeavyLiftCranes/apiGen/main/pyFiles/bearer.py", "auth.py")
 
 def setup_database(project_path):
-    db_type = input("Select database:\n1) Stark Tower SQLServer\nEnter selection [1]: ")
+    db_type = input("Select database:\n1) Stark Tower SQLServer\nEnter selection [1], Press any key for default: ")
     
     if db_type == '1':
         with open(project_path / '.env', 'a') as f:
