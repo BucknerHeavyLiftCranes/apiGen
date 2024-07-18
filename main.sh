@@ -63,6 +63,18 @@ then
 else
     brew update
 fi
+# Check if GitHub CLI is installed
+echo "Checking if GitHub CLI is installed"
+if ! command -v gh &> /dev/null
+then
+    echo "GitHub CLI is not found. Installing GitHub CLI..."
+    brew install gh
+    echo "GitHub CLI installed successfully."
+else
+    echo "GitHub CLI is already installed. Updating..."
+    brew upgrade gh
+fi
+
 
 echo "Checking if Python is installed"
 if ! command -v python3 &> /dev/null
@@ -96,7 +108,7 @@ touch requirements.txt
 echo "python-dotenv" >> requirements.txt
 echo "requests" >> requirements.txt
 
-echo "$projectName is a project created by the Buckner Heavy Lift Cranes API team. This project is used to interact with the $projectName API" > README.md
+echo "$projectName is a project created by the Buckner Heavylift Cranes API team. This project is used to interact with the $projectName API" > README.md
 
 
 echo ".gitignore" >> .gitignore
@@ -185,21 +197,43 @@ echo -ne '\n'
 
 ./endpoints.sh
 
+mkdir .github
+mkdir .github/workflows
+curl https://raw.githubusercontent.com/BucknerHeavyLiftCranes/apiGen/main/utils/deploy.yml > .github/workflows/deploy.yml
+
+echo "Github actions workflow created"
+echo "You will need to add secrets in github in order for the workflow to run"
+
 trap - SIGINT SIGTERM EXIT
 
-#Set up repo and make intial commit
+echo "Do you want to create a GitHub repository for this project? (y/n)"
+read create_repo
 
-# git init 
+if [ "$create_repo" = "y" ] || [ "$create_repo" = "Y" ]; then
+    echo "Creating GitHub repository..."
 
-# git add .
+    # Ensure gh CLI is authenticated
+    if ! gh auth status &>/dev/null; then
+        echo "GitHub CLI is not authenticated. Please log in."
+        gh auth login
+    fi
 
-# git commit -m "Initial commit"
+    # Create repo
+    gh repo create BucknerHeavyLiftCranes/$projectName --private
 
-# git remote add origin https://github.com/BucknerHeavyLiftCranes/$projectName.git
+    # Initialize git and push
+    git init 
+    git add .
+    git commit -m "Initial commit"
+    git remote add origin https://github.com/BucknerHeavyLiftCranes/$projectName.git
+    git push -u origin master
 
-# git push -u origin master
+    echo "Project $projectName created and pushed to GitHub"
+else
+    echo "Skipping GitHub repository creation"
+fi
 
-# echo "Project $projectName created and pushed to github"
+
 
 echo -e "\nProject $projectName created successfully"
 echo "You can now start developing your API"
