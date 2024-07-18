@@ -178,10 +178,10 @@ echo "You will need to manually add DB credentials to the .env file"
 echo "Installing requirements"
 python3 -m pip install --upgrade pip
 pip3 install -r requirements.txt
-mkdir utils
+mkdir scripts
 #download endpoint creation script
-curl https://raw.githubusercontent.com/BucknerHeavyLiftCranes/apiGen/main/endpoints.sh > ./utils/endpoints.sh
-chmod +x endpoints.sh
+curl https://raw.githubusercontent.com/BucknerHeavyLiftCranes/apiGen/main/endpoints.sh > ./scripts/endpoints.sh
+chmod +x ./scripts/endpoints.sh
 
 echo "Running endpoint creation script \n"
 echo -ne 'Loading: [                    ] (0%)\r'

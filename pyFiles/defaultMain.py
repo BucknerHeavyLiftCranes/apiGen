@@ -1,4 +1,4 @@
-import auth import get_auth_token
+from auth import get_auth_token
 import os
 from dotenv import load_dotenv
 import traceback
